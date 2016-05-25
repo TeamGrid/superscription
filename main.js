@@ -57,12 +57,14 @@ export class Superscription {
         }
       })
     }
-    const current = Tracker.nonreactive(() => this._subs.get())
-    const ready = sub.areAllReady ? sub.areAllReady() : sub.ready()
-    if (current[sub.subscriptionId] !== ready) {
-      current[sub.subscriptionId] = ready
-      this._subs.set(current)
-    }
+    Tracker.autorun(() => {
+      const current = Tracker.nonreactive(() => this._subs.get())
+      const ready = sub.areAllReady ? sub.areAllReady() : sub.ready()
+      if (current[sub.subscriptionId] !== ready) {
+        current[sub.subscriptionId] = ready
+        this._subs.set(current)
+      }
+    })
   }
 
   isReady() { return this._isReady.get() }
