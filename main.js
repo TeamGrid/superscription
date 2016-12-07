@@ -67,6 +67,11 @@ export class Superscription {
     })
   }
 
+  stop() {
+    this.subscription.stop()
+    _.values(Tracker.nonreactive(() => this._subs.get())).forEach(sub => sub.stop())
+  }
+
   isReady() { return this._isReady.get() }
   areAllReady() { return this._areAllReady.get() }
 
